@@ -1,0 +1,29 @@
+ligneGare:
+  20-1:
+    ligne_id: 20
+    gare_id: 1
+  20-2:
+    ligne_id: 20
+    gare_id: 2
+  20-3:
+    ligne_id: 20
+    gare_id: 3
+  20-4:
+    ligne_id: 20
+    gare_id: 4
+  20-5:
+    ligne_id: 20
+    gare_id: 5
+  20-6:
+    ligne_id: 20
+    gare_id: 6
+  20-7:
+    ligne_id: 20
+    gare_id: 7
+  20-13:
+    ligne_id: 20
+    gare_id: 13
+  20-14:
+    ligne_id: 20
+    gare_id: 14
+

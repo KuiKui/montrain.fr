@@ -1,0 +1,44 @@
+gare:
+  1:
+    id: 1
+    nom: Lyon Perrache
+  2:
+    id: 2
+    nom: Lyon Part-dieu
+  3:
+    id: 3
+    nom: Lyon Vaise
+  4:
+    id: 4
+    nom: Lyon Gorge de Loup
+  5:
+    id: 5
+    nom: Tassin
+  6:
+    id: 6
+    nom: Saint Germain au Mont d'or
+  7:
+    id: 7
+    nom: Lozanne
+  8:
+    id: 8
+    nom: L'arbresle
+  9:
+    id: 9
+    nom: Tarare
+  10:
+    id: 10
+    nom: Roanne
+  11:
+    id: 11
+    nom: Vichy
+  12:
+    id: 12
+    nom: Clermont
+  13:
+    id: 13
+    nom: Bois d'oingt - Légny
+  14:
+    id: 14
+    nom: Lamure sur Azergues
+

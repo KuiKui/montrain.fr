@@ -1,0 +1,34 @@
+propel:
+  gare:
+    id:              { type: integer, primaryKey: true, required: true }
+    nom:             { type: varchar(255), required: true, index: unique }
+    valide:          { type: boolean, required: true, default: true}
+
+  ligne:
+    id:              { type: integer, primaryKey: true, required: true }
+    nom:             { type: varchar(255), required: true, index: unique }
+    valide:          { type: boolean, required: true, default: true}
+
+  ligne_gare:
+    ligne_id:        { type: integer, primaryKey: true, foreignTable: ligne, foreignReference: id, required: true }
+    gare_id:         { type: integer, primaryKey: true, foreignTable: gare, foreignReference: id, required: true }
+    valide:          { type: boolean, required: true, default: true}
+    
+
+  discussion:
+    id:              ~
+    ligne_id:        { type: integer, foreignTable: ligne, foreignReference: id, required: true }
+    nom:             { type: varchar(255), required: true, index: unique }
+    nombre_message:  { type: integer, required: true, default: 0}
+    importante:      { type: boolean, required: true, default: false}
+    valide:          { type: boolean, required: true, default: true}
+    created_at:      ~
+    updated_at:      ~
+
+  message:
+    id:              ~
+    discussion_id:   { type: integer, foreignTable: discussion, foreignReference: id, required: true }
+    contenu:         { type: varchar(255), required: true}
+    valide:          { type: boolean, required: true, default: true}
+    created_at:      ~
+    updated_at:      ~

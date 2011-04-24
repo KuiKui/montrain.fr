@@ -1,0 +1,12 @@
+div.valid {
+	color: #0F0;
+}
+
+div.error {
+	color: #F00;
+}
+
+span.timing {
+	font-size: 10px;
+	color: #555;
+}

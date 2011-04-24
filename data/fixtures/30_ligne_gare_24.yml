@@ -1,0 +1,32 @@
+ligneGare:
+  24-1:
+    ligne_id: 24
+    gare_id: 1
+  24-2:
+    ligne_id: 24
+    gare_id: 2
+  24-3:
+    ligne_id: 24
+    gare_id: 3
+  24-6:
+    ligne_id: 24
+    gare_id: 6
+  24-7:
+    ligne_id: 24
+    gare_id: 7
+  24-8:
+    ligne_id: 24
+    gare_id: 8
+  24-9:
+    ligne_id: 24
+    gare_id: 9
+  24-10:
+    ligne_id: 24
+    gare_id: 10
+  24-11:
+    ligne_id: 24
+    gare_id: 11
+  24-12:
+    ligne_id: 24
+    gare_id: 12
+

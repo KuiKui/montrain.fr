@@ -1,0 +1,14 @@
+discussion:
+  1:
+    ligne_id: 20
+    nom: 'Première discussion Lamure'
+  2:
+    ligne_id: 20
+    nom: 'Deuxième discussion Lamure'
+  3:
+    ligne_id: 24
+    nom: 'Première discussion Roanne'
+  4:
+    ligne_id: 24
+    nom: 'Deuxième discussion Roanne'
+

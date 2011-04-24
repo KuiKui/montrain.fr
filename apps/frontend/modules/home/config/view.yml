@@ -1,0 +1,8 @@
+indexSuccess:
+  javascripts: [home]
+
+discussionsListSuccess:
+  javascripts: [discussionsList]
+
+messagesListSuccess:
+  javascripts: [messagesList]
