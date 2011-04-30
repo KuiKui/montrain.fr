@@ -5,9 +5,9 @@
  *
  * @method Horaire getObject() Returns the current form's model object
  *
- * @package    montrain
+ * @package    montrain.fr
  * @subpackage form
- * @author     Your name here
+ * @author     KuiKui
  */
 abstract class BaseHoraireForm extends BaseFormPropel
 {

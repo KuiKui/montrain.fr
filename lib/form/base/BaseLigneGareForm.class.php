@@ -5,9 +5,9 @@
  *
  * @method LigneGare getObject() Returns the current form's model object
  *
- * @package    montrain
+ * @package    montrain.fr
  * @subpackage form
- * @author     Your name here
+ * @author     KuiKui
  */
 abstract class BaseLigneGareForm extends BaseFormPropel
 {

@@ -3,9 +3,9 @@
 /**
  * Gare filter form base class.
  *
- * @package    montrain
+ * @package    montrain.fr
  * @subpackage filter
- * @author     Your name here
+ * @author     KuiKui
  */
 abstract class BaseGareFormFilter extends BaseFormFilterPropel
 {

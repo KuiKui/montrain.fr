@@ -17,8 +17,8 @@ function addMessage() {
 	} else {
 		$.ajax({
 			type: "POST",
-		    	url: "home/addMessage",
-			data: ({discussionId: $("#discussionId").val(), contenu: contenu}),
+		    	url: "index.php/home/addMessage",
+				data: ({discussionId: $("#discussionId").val(), contenu: contenu}),
 		    	dataType: "json",
 		    	success: function(msg) {
 				var infos = "";
@@ -44,10 +44,10 @@ function displayUnreadMessages() {
 
 	$.ajax({
 		type: "POST",
-	    	url: "home/getMessages",
+		url: "index.php/home/getMessages",
 		data: ({discussionId: $("#discussionId").val(), lastMessageId: $("#messagesList").attr("data-last-message-id")}),
-	    	dataType: "json",
-	    	success: function(msg) {
+	    dataType: "json",
+	    success: function(msg) {
 			var infos = "";
 			if(msg != undefined && msg.length > 0 && (infos=eval(msg)) != undefined) {
 				var lastMessageId = 0;
@@ -58,9 +58,9 @@ function displayUnreadMessages() {
 				$("#messagesList").attr("data-last-message-id", lastMessageId);
 			}
 			$("#ecrire").show();
-	    	},
-	    	error: function() {
+	    },
+	    error: function() {
 			$("#ecrire").show();
-	    	}
+	    }
 	});
 }

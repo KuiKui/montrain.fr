@@ -19,8 +19,8 @@ function fillLignes(gareId) {
 
         $.ajax({
             type: "POST",
-            url: "home/getLignesFromGare?gareId=" + gareId,
-            contentType: "application/json; charset=utf-8",
+            url: "index.php/home/getLignesFromGare", //?gareId=" + gareId,
+            data: ({gareId: gareId}),
             dataType: "json",
             success: function(msg) {
                 $.each(msg, function(index, item) {
