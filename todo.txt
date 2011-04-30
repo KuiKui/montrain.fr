@@ -1,0 +1,8 @@
+Rapidement :
+- Supprimer la date des fichier générés par Propel
+- Faire une seule fonction qui retourne les messages pour pouvoir implémenter le "plus d'anciens messages"
+- Utiliser l'IP pour générer une couleur et afficher une icone de cette couleur à coté du message (ca simplifie la lecture)
+
+Plus tard :
+- Faire la mise en page
+- Renforcer la sécurité
