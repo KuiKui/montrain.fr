@@ -113,6 +113,7 @@ class homeActions extends sfActions
 
     if($discussionId > 0)
     {
+        // TODO: mettre dans le modèle et factoriser (appel initial, appel intermédiaire et appel pour voir plus)
       $c = new Criteria();
       $c->add(MessagePeer::DISCUSSION_ID, $discussionId);
       $c->add(MessagePeer::VALIDE, 1);

@@ -17,10 +17,10 @@ function addMessage() {
 	} else {
 		$.ajax({
 			type: "POST",
-		    	url: "index.php/home/addMessage",
-				data: ({discussionId: $("#discussionId").val(), contenu: contenu}),
-		    	dataType: "json",
-		    	success: function(msg) {
+		    url: "/index.php/home/addMessage",
+			data: ({discussionId: $("#discussionId").val(), contenu: contenu}),
+		    dataType: "json",
+		    success: function(msg) {
 				var infos = "";
 				if(msg != undefined && msg.length > 0 && (infos=eval(msg)) != undefined && infos.returnCode == 0) {
 					displayUnreadMessages();
@@ -39,13 +39,15 @@ function addMessage() {
 }
 
 function displayUnreadMessages() {
-	if($("#messagesList") == undefined || $("#messagesList").attr("data-last-message-id") == undefined || $("#messagesList").attr("data-last-message-id") == 0)
-		return;
+    var lastMessageId = 0;
+	if($("#messagesList") != undefined && $("#messagesList").attr("data-last-message-id") != undefined) {
+        lastMessageId = $("#messagesList").attr("data-last-message-id");
+    }
 
 	$.ajax({
 		type: "POST",
-		url: "index.php/home/getMessages",
-		data: ({discussionId: $("#discussionId").val(), lastMessageId: $("#messagesList").attr("data-last-message-id")}),
+		url: "/index.php/home/getMessages",
+		data: ({discussionId: $("#discussionId").val(), lastMessageId: lastMessageId}),
 	    dataType: "json",
 	    success: function(msg) {
 			var infos = "";

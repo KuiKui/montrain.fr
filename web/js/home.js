@@ -8,8 +8,8 @@ $(document).ready(function() {
                         $("#newLigne").show();
 		} else {
 			$("#ligne").hide();
-                        $("#newLigne").hide();
-                        $("#newGare").show();
+            $("#newLigne").hide();
+            $("#newGare").show();
 		}
 	});
 }); 
@@ -19,7 +19,7 @@ function fillLignes(gareId) {
 
         $.ajax({
             type: "POST",
-            url: "index.php/home/getLignesFromGare", //?gareId=" + gareId,
+            url: "/index.php/home/getLignesFromGare",
             data: ({gareId: gareId}),
             dataType: "json",
             success: function(msg) {

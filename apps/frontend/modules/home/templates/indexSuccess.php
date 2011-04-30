@@ -1,4 +1,4 @@
-<h1><a href="<?php echo url_for('@homepage') ?>">mon-TER.com</a></h1>
+<h1><a href="<?php echo url_for('@homepage') ?>">montrain.fr</a></h1>
 <form name="trainForm" id="trainForm" action="<?php echo url_for('home/discussionsList') ?>" method="get">
   <select id="gare">
     <option value="0">Sélectionnez une gare</option>
@@ -9,5 +9,5 @@
   <select id="ligne" name="ligne" style="display:none;"></select>
   <input type="submit" value="Discuter" id="discuter" style="display:none;" />
 </form>
-<div id="newGare">Pour ajouter une nouvelle gare</div>
-<div id="newLigne" style="display:none;">Pour ajouter une nouvelle ligne</div>
+<a id="newGare" href="#">Votre gare n'est pas disponible ?</a>
+<a id="newLigne" href="#" style="display:none;">Votre ligne n'est pas disponible ?</a>

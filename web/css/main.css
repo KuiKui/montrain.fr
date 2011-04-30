@@ -10,3 +10,10 @@ span.timing {
 	font-size: 10px;
 	color: #555;
 }
+
+a#newGare,
+a#newLigne {
+    color: #555;
+    font-size: 12px;
+    text-decoration: none;
+}

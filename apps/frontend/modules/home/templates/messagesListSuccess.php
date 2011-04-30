@@ -1,5 +1,6 @@
-<a href="<?php echo url_for('home/discussionsList?ligne='.$discussion->getLigneId()) ?>">retour</a><br />
-<h1><?php echo $discussion->getNom() ?></h1>
+<h1><a href="<?php echo url_for('@homepage') ?>">montrain.fr</a></h1>
+<a href="<?php echo url_for('home/discussionsList?ligne='.$discussion->getLigneId()) ?>">Liste des discussions</a><br />
+<h2><?php echo $discussion->getNom() ?></h2>
 
 <form name="messageForm" id="messageForm" action="<?php echo url_for('home/addMessage') ?>" method="post">
   <input type="hidden" id="discussionId" name="discussionId" value="<?php echo $discussion->getId() ?>" />
@@ -8,12 +9,8 @@
 </form>
 <div id="informations"></div>
 
-<?php if(count($messages) == 0): ?>
-	<div>Aucun message n'a encore été publié sur cette discussion.</div>
-<?php else: ?>
-	<ul id="messagesList" data-last-message-id="<?php echo $lastMessageId ?>">
-	<?php foreach ($messages as $message): ?>
-		<li><span class="contenu"><?php echo $message->getContenu() ?></span><span class="timing"><?php echo $message->getCreatedAt('\L\e m/d/Y \à H\hi:s') ?></span></li>
-	<?php endforeach; ?>
-	</ul>
-<?php endif; ?>
+<ul id="messagesList" data-last-message-id="<?php echo $lastMessageId ?>">
+    <?php foreach ($messages as $message): ?>
+        <li><span class="contenu"><?php echo $message->getContenu() ?></span><span class="timing"><?php echo $message->getCreatedAt('\L\e m/d/Y \à H\hi:s') ?></span></li>
+    <?php endforeach; ?>
+</ul>
