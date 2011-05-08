@@ -29,19 +29,24 @@ function addMessage() {
 					$("#informations").text("Impossible de publier votre message").removeClass("valid").addClass("error").show().fadeOut(2000);
 					$("#ecrire").show();
 				}
-		    	},
-		    	error: function() {
-				$("#informations").text("Impossible de publier votre message").removeClass("valid").addClass("error").show().fadeOut(2000);
-				$("#ecrire").show();
-		    	}
+		    },
+            error: function() {
+                $("#informations").text("Impossible de publier votre message").removeClass("valid").addClass("error").show().fadeOut(2000);
+                $("#ecrire").show();
+            }
 		});
 	}
 }
 
 function displayUnreadMessages() {
     var lastMessageId = 0;
-	if($("#messagesList") != undefined && $("#messagesList").attr("data-last-message-id") != undefined) {
+    if($("#messagesList") != undefined && $("#messagesList").attr("data-last-message-id") != undefined) {
         lastMessageId = $("#messagesList").attr("data-last-message-id");
+    }
+
+    var displayedMessagesAmount = 100;
+    if($("#messagesList") != undefined && $("#messagesList").attr("data-displayed-messages-amount") != undefined) {
+        displayedMessagesAmount = $("#messagesList").attr("data-displayed-messages-amount");
     }
 
 	$.ajax({
@@ -53,11 +58,18 @@ function displayUnreadMessages() {
 			var infos = "";
 			if(msg != undefined && msg.length > 0 && (infos=eval(msg)) != undefined) {
 				var lastMessageId = 0;
+                var count = 0;
 				$.each(infos, function(index, item) {
-					$("#messagesList").prepend('<li><span class="contenu">' + item.contenu + '</span><span class="timing">' + item.heure + '</span></li>');
-					lastMessageId = item.id;
-		                });
+                    if(count < displayedMessagesAmount) {
+                        $("#messagesList").prepend('<li><span class="contenu">' + item.contenu + '</span><span class="timing">' + item.heure + '</span></li>');
+                        lastMessageId = item.id;
+                        count++;
+                    }
+                });
 				$("#messagesList").attr("data-last-message-id", lastMessageId);
+                $('#messagesList').children().filter(function(index){
+                    return (index >= displayedMessagesAmount);
+                }).remove();
 			}
 			$("#ecrire").show();
 	    },

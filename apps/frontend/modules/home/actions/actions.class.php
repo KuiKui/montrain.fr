@@ -22,7 +22,7 @@ class homeActions extends sfActions
       $gareId = $request->getParameter('gareId');
       if($gareId > 0) {
         $c = new Criteria();
-	$c->addJoin(LigneGarePeer::LIGNE_ID, LignePeer::ID, Criteria::LEFT_JOIN);
+        $c->addJoin(LigneGarePeer::LIGNE_ID, LignePeer::ID, Criteria::LEFT_JOIN);
         $c->add(LigneGarePeer::GARE_ID, $gareId);
         $c->add(LigneGarePeer::VALIDE, 1);
         $c->add(LignePeer::VALIDE, 1);
@@ -55,23 +55,19 @@ class homeActions extends sfActions
     $discussionId = $request->getParameter('discussion');
 
     $this->discussion = DiscussionPeer::retrieveByPK($discussionId);
-
-    $c = new Criteria();
-    $c->add(MessagePeer::DISCUSSION_ID, $discussionId);
-    $c->add(MessagePeer::VALIDE, 1);
-    $c->addDescendingOrderByColumn(MessagePeer::CREATED_AT);
-    $this->messages = MessagePeer::doSelect($c);
-
+    $this->displayedMessagesAmount = 3;
+    $this->messages = MessagePeer::getMessagesFromDiscussion($discussionId, false, null, null, $this->displayedMessagesAmount);
     $this->lastMessageId = (count($this->messages) > 0) ? $this->messages[0]->getId() : 0;
+    (count($this->messages) > 0) ? $this->messages[0]->getId() : 0;
   }
 
   public function executeAddMessage(sfWebRequest $request)
   {
     $returnCode = 1;
     $discussionId = $request->getParameter('discussionId');
-    $contenu = $request->getParameter('contenu');
+    $content = $request->getParameter('contenu');
 
-    if($discussionId > 0 && strlen($contenu) > 0 && strlen($contenu) < 140)
+    if($discussionId > 0 && strlen($content) > 0 && strlen($content) < 140)
     {
       $con = Propel::getConnection();
       try
@@ -79,12 +75,12 @@ class homeActions extends sfActions
         $con->beginTransaction();
         $message = new Message();
         $message->setDiscussionId($discussionId);
-        $message->setContenu($contenu);
+        $message->setContenu($content);
         $message->save();
 
-	$discussion = DiscussionPeer::retrieveByPK($discussionId);
-	$discussion->setUpdatedAt('now');
-	$discussion->save();
+        $discussion = DiscussionPeer::retrieveByPK($discussionId);
+        $discussion->setUpdatedAt('now');
+        $discussion->save();
 
         $returnCode = 0;
         $con->commit();
@@ -113,14 +109,7 @@ class homeActions extends sfActions
 
     if($discussionId > 0)
     {
-        // TODO: mettre dans le modèle et factoriser (appel initial, appel intermédiaire et appel pour voir plus)
-      $c = new Criteria();
-      $c->add(MessagePeer::DISCUSSION_ID, $discussionId);
-      $c->add(MessagePeer::VALIDE, 1);
-      $c->add(MessagePeer::ID, $lastMessageId, Criteria::GREATER_THAN);
-      $c->addAscendingOrderByColumn(MessagePeer::CREATED_AT);
-      $messages = MessagePeer::doSelect($c);
-      
+      $messages = MessagePeer::getMessagesFromDiscussion( $discussionId, true, null, $lastMessageId + 1);
       foreach($messages as $message) {
         $results [] = array(
         'id' => $message->getId(),

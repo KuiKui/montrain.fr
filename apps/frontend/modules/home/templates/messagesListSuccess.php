@@ -9,7 +9,7 @@
 </form>
 <div id="informations"></div>
 
-<ul id="messagesList" data-last-message-id="<?php echo $lastMessageId ?>">
+<ul id="messagesList" data-last-message-id="<?php echo $lastMessageId ?>" data-displayed-messages-amount="<?php echo $displayedMessagesAmount ?>">
     <?php foreach ($messages as $message): ?>
         <li><span class="contenu"><?php echo $message->getContenu() ?></span><span class="timing"><?php echo $message->getCreatedAt('\L\e m/d/Y \à H\hi:s') ?></span></li>
     <?php endforeach; ?>

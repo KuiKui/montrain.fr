@@ -18,4 +18,37 @@
  */
 class MessagePeer extends BaseMessagePeer {
 
+    const SAFETY_AMOUNT = 200;
+
+    static public function getMessagesFromDiscussion($discussionId, $chronologicalOrder = true, $newerMessageId=null, $olderMessageId=null, $amount=0, $safety=true)
+    {
+        $c = new Criteria();
+        $c->add(self::DISCUSSION_ID, $discussionId);
+        $c->add(self::VALIDE, 1);
+        if(!is_null($newerMessageId) && $newerMessageId > 0)
+        {
+            $c->add(self::ID, $newerMessageId, Criteria::LESS_EQUAL);
+        }
+        if(!is_null($olderMessageId) && $olderMessageId > 0)
+        {
+            $c->add(self::ID, $olderMessageId, Criteria::GREATER_EQUAL);
+        }
+        if($chronologicalOrder)
+        {
+            $c->addAscendingOrderByColumn(self::CREATED_AT);
+        }
+        else
+        {
+            $c->addDescendingOrderByColumn(self::CREATED_AT);
+        }
+        if($safety && $amount > self::SAFETY_AMOUNT)
+        {
+            $amount = self::SAFETY_AMOUNT;
+        }
+        else if($amount > 0)
+        {
+            $c->setLimit($amount);
+        }
+        return self::doSelect($c);
+    }
 } // MessagePeer
