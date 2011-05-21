@@ -2,11 +2,11 @@
 
 class homeActions extends sfActions
 {
- /**
-  * Executes index action
-  *
-  * @param sfRequest $request A request object
-  */
+  /**
+   * Executes index action
+   *
+   * @param sfRequest $request A request object
+   */
   public function executeIndex(sfWebRequest $request)
   {
     $c = new Criteria();
@@ -16,32 +16,38 @@ class homeActions extends sfActions
 
   public function executeGetLignesFromGare(sfWebRequest $request)
   {
+    $gareId = $request->getParameter('gareId');
+    $this->forward404Unless($gareId);
+
+    $c = new Criteria();
+    $c->addJoin(LigneGarePeer::LIGNE_ID, LignePeer::ID, Criteria::LEFT_JOIN);
+    $c->add(LigneGarePeer::GARE_ID, $gareId);
+    $c->add(LigneGarePeer::VALIDE, 1);
+    $c->add(LignePeer::VALIDE, 1);
+    $c->addAscendingOrderByColumn(LigneGarePeer::GARE_ID);
+    $lignes = LigneGarePeer::doSelect($c);
+
+    $results = array();
+
+    foreach($lignes as $ligne)
+    {
+      $results[$ligne->getLigne()->getId()] = sprintf('%s - %s', $ligne->getLigne()->getId(), $ligne->getLigne()->getNom());
+    }
+
     if($request->isXmlHttpRequest())
     {
-      $results = array();
-      $gareId = $request->getParameter('gareId');
-      if($gareId > 0) {
-        $c = new Criteria();
-        $c->addJoin(LigneGarePeer::LIGNE_ID, LignePeer::ID, Criteria::LEFT_JOIN);
-        $c->add(LigneGarePeer::GARE_ID, $gareId);
-        $c->add(LigneGarePeer::VALIDE, 1);
-        $c->add(LignePeer::VALIDE, 1);
-        $c->addAscendingOrderByColumn(LigneGarePeer::GARE_ID);
-        $lignes = LigneGarePeer::doSelect($c);
-
-        foreach($lignes as $ligne)
-        {
-          $results[$ligne->getLigne()->getId()] = sprintf('%s - %s', $ligne->getLigne()->getId(), $ligne->getLigne()->getNom());
-        }      
-      }
-
       return $this->renderText(json_encode($results));
+    }
+    else
+    {
+      return $results;
     }
   }
 
   public function executeDiscussionsList(sfWebRequest $request)
   {
     $ligneId = $request->getParameter('ligne');
+    $this->forward404Unless($ligneId);
 
     $c = new Criteria();
     $c->add(DiscussionPeer::LIGNE_ID, $ligneId);
@@ -53,21 +59,23 @@ class homeActions extends sfActions
   public function executeMessagesList(sfWebRequest $request)
   {
     $discussionId = $request->getParameter('discussion');
+    $this->forward404Unless($discussionId);
 
+    $this->messageMaxLength = sfConfig::get('app_message_max_length');
+    $this->displayedMessagesAmount = sfConfig::get('app_displayed_messages_amount');
     $this->discussion = DiscussionPeer::retrieveByPK($discussionId);
-    $this->displayedMessagesAmount = 3;
-    $this->messages = MessagePeer::getMessagesFromDiscussion($discussionId, false, null, null, $this->displayedMessagesAmount);
-    $this->lastMessageId = (count($this->messages) > 0) ? $this->messages[0]->getId() : 0;
-    (count($this->messages) > 0) ? $this->messages[0]->getId() : 0;
+    $this->totalAmountOfMessages = MessagePeer::getTotalAmountFromDiscussion($discussionId);
   }
 
   public function executeAddMessage(sfWebRequest $request)
   {
     $returnCode = 1;
     $discussionId = $request->getParameter('discussionId');
+    $this->forward404Unless($discussionId);
+
     $content = $request->getParameter('contenu');
 
-    if($discussionId > 0 && strlen($content) > 0 && strlen($content) < 140)
+    if($discussionId > 0 && strlen($content) > 0 && strlen($content) <= sfConfig::get('app_message_max_length'))
     {
       $con = Propel::getConnection();
       try
@@ -85,42 +93,44 @@ class homeActions extends sfActions
         $returnCode = 0;
         $con->commit();
       }
-      catch (Exception $e)
+      catch(Exception $e)
       {
         $con->rollback();
         throw $e;
       }
     }
 
-    if($request->isXmlHttpRequest()) {
-      return $this->renderText(json_encode('({returnCode:'.$returnCode.'})'));
-    } else {
-      $this->redirect(url_for('home/messagesList?discussionId='.$discussionId));
+    if($request->isXmlHttpRequest())
+    {
+      return $this->renderText(json_encode('({returnCode:' . $returnCode . '})'));
+    }
+    else
+    {
+      $this->redirect(url_for('home/messagesList?discussionId=' . $discussionId));
     }
   }
 
-  public function executeGetMessages(sfWebRequest $request)
+  public function executeGetLastMessages(sfWebRequest $request)
   {
-    //if(!$request->isXmlHttpRequest()) return;
-
     $discussionId = $request->getParameter('discussionId');
-    $lastMessageId = ($request->hasParameter('lastMessageId')) ? $request->getParameter('lastMessageId') : 0;
+    $amount = ($request->hasParameter('amount')) ? $request->getParameter('amount') : sfConfig::get('app_displayed_messages_amount');
+    $startMessagesId = ($request->hasParameter('startMessagesId')) ? $request->getParameter('startMessagesId') : null;
+    $this->forward404Unless(is_numeric($discussionId) && $discussionId > 0 && $request->isXmlHttpRequest());
+
+    $messages = MessagePeer::getLastMessagesFromDiscussion($discussionId, $amount, $startMessagesId);
     $results = array();
 
-    if($discussionId > 0)
+    foreach($messages as $message)
     {
-      $messages = MessagePeer::getMessagesFromDiscussion( $discussionId, true, null, $lastMessageId + 1);
-      foreach($messages as $message) {
-        $results [] = array(
+      $results [] = array(
         'id' => $message->getId(),
         'heure' => $message->getCreatedAt('\L\e m/d/Y \à H\hi:s'),
         'contenu' => $message->getContenu()
-        );
-      }
+      );
     }
+
     return $this->renderText(json_encode($results));
   }
-
 }
 
 
