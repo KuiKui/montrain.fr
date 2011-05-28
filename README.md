@@ -28,7 +28,17 @@ Contributing
 ------------
 
 1. Fork it.
-2. Create a branch (`git checkout -b my_branch`)
-3. Commit your changes (`git commit -am "Added new features"`)
-4. Push to the branch (`git push origin my_branch`)
-5. Create an [Issue][1] with a link to your branch
+2. Create a branch : `git checkout -b my_branch`
+3. Commit your changes : `git commit -am "Added new features"`
+4. Push to the branch : `git push origin my_branch`
+5. Create an [issue](http://github.com/KuiKui/montrain.fr/issues?sort=updated&direction=desc&_pjax=true&state=open) with a link to your branch.
+
+Setup
+-----
+1. Fork it.
+2. Create a MySql database.
+3. Copy `config/databases.yml.dist` into `config/databases.yml` and configure it with your database connexion infos.
+3. Copy `propel.ini.dist` into `propel.ini` and configure only `propel.database.url`
+5. Set permissions : `./symfony project:permissions`
+6. Load fixtures : `./symfony propel:build-all-load --no-confirmation`
+5. Configure your web server and restart it.
