@@ -42,25 +42,20 @@ class MessagePeer extends BaseMessagePeer
     return $c;
   }
 
-  static public function getLastMessagesFromDiscussion($discussionId, $amount, $startMessagesId = null)
+  static public function getLastMessagesFromDiscussion($discussionId, $amount, $startMessageId = null)
   {
-    //var_dump($startMessagesId); die();
     $c = self::getMessagesFromDiscussionCriteria($discussionId);
-    if(!is_null($startMessagesId) && $startMessagesId > 0)
+    if(!is_null($startMessageId) && $startMessageId > 0)
     {
-      $c->add(self::ID, $startMessagesId, Criteria::GREATER_EQUAL);
+      $c->add(self::ID, $startMessageId, Criteria::GREATER_EQUAL);
     }
     $c->addAscendingOrderByColumn(self::CREATED_AT);
 
     $messages = self::doSelect($c);
 
-    //var_dump($messages);var_dump("*************");
-
     // TODO: utiliser une requete SQL qui évite de faire ce traitement car tous les enregistrements sont retournés...
     // Il semblerait par contre, qu'il soit impossible de réaliser cette opération en une seule requête SQL
     $results = (is_null($messages)) ? null : array_slice($messages, 0 - $amount, $amount, true);
-    
-    //var_dump($results); var_dump($amount); die();
     
     return $results;
   }

@@ -14,5 +14,5 @@
 </ul>
 
 <?php if($totalAmountOfMessages > $displayedMessagesAmount): ?>
-  <a href="#" title="Voir plus de messages">Voir plus de message</a>
-<?php endif;
+  <a id="moreMessages" href="#" title="Voir plus de messages">Voir plus de message</a>
+<?php endif; ?>
