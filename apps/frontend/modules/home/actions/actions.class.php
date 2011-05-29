@@ -111,16 +111,32 @@ class homeActions extends sfActions
     }
   }
 
-  public function executeGetLastMessages(sfWebRequest $request)
+  public function executeGetMessages(sfWebRequest $request)
   {
     $discussionId = $request->getParameter('discussionId');
     $amount = ($request->hasParameter('amount')) ? $request->getParameter('amount') : sfConfig::get('app_displayed_messages_amount');
-    $startMessagesId = ($request->hasParameter('startMessagesId')) ? $request->getParameter('startMessagesId') : null;
+    $lowerBoundId = ($request->hasParameter('lowerBoundId')) ? $request->getParameter('lowerBoundId') : null;
+    $upperBoundId = ($request->hasParameter('upperBoundId')) ? $request->getParameter('upperBoundId') : null;
+    $reverseResults = ($request->hasParameter('reverseResults')) ? $request->getParameter('reverseResults') : false;
     $this->forward404Unless(is_numeric($discussionId) && $discussionId > 0 && $request->isXmlHttpRequest());
 
-    $messages = MessagePeer::getLastMessagesFromDiscussion($discussionId, $amount, $startMessagesId);
-    $results = array();
+    $messages = MessagePeer::getLastMessagesFromDiscussion($discussionId, $amount, $lowerBoundId, $upperBoundId);
+    if($reverseResults)
+    {
+      $messages = array_reverse($messages, true);
+    }
 
+    $results = array(
+      'messages'  => $this->formatMessages($messages),
+      'total'     => MessagePeer::getTotalAmountFromDiscussion($discussionId)
+    );
+    
+    return $this->renderText(json_encode($results));
+  }
+  
+  public function formatMessages($messages)
+  {
+    $results = array();
     foreach($messages as $message)
     {
       $results [] = array(
@@ -130,8 +146,7 @@ class homeActions extends sfActions
         'couleur' => $message->getCouleur()
       );
     }
-
-    return $this->renderText(json_encode($results));
+    return $results;
   }
 }
 

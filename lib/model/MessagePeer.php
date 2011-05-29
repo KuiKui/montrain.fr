@@ -35,25 +35,27 @@ class MessagePeer extends BaseMessagePeer
     {
       $c = clone($criteria);
     }
-
     $c->add(self::DISCUSSION_ID, $discussionId);
     $c->add(self::VALIDE, 1);
 
     return $c;
   }
 
-  static public function getLastMessagesFromDiscussion($discussionId, $amount, $startMessageId = null)
+  static public function getLastMessagesFromDiscussion($discussionId, $amount, $lowerBoundId = null, $upperBoundId = null)
   {
     $c = self::getMessagesFromDiscussionCriteria($discussionId);
-    if(!is_null($startMessageId) && $startMessageId > 0)
+    if(!is_null($lowerBoundId) && $lowerBoundId > 0)
     {
-      $c->add(self::ID, $startMessageId, Criteria::GREATER_EQUAL);
+      $c->add(self::ID, $lowerBoundId, Criteria::GREATER_THAN);
+    }
+    if(!is_null($upperBoundId) && $upperBoundId > 0)
+    {
+      $c->add(self::ID, $upperBoundId, Criteria::LESS_THAN);
     }
     $c->addDescendingOrderByColumn(self::CREATED_AT);
     $c->setLimit($amount);
-    $messages = self::doSelect($c);
 
-    return array_reverse($messages, true);
+    return self::doSelect($c);
   }
 
   static public function getTotalAmountFromDiscussion($discussionId)

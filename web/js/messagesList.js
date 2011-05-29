@@ -3,22 +3,26 @@ $(document).ready(function() {
   displayStartMessages();
   $("#messageForm").bind("submit", function(e) {
     $("#ecrire").hide();
-    addMessage();
+    addMessage();    
     $("#ecrire").show();
+    return false;
+  });
+  $("#moreMessages").bind("click", function(e) {
+    displayMoreMessages();
     return false;
   });
 });
 
 function displayStartMessages() {
-  displayMessages($("#discussionId").val());
+  loadNewestMessages($("#discussionId").val());
 }
 
 function displayUnreadMessages() {
-  var lastMessageId = null;
-  if($("#messagesList") != undefined && $("#messagesList").attr("data-last-message-id") != undefined){
-    lastMessageId = parseInt($("#messagesList").attr("data-last-message-id")) + 1;
-  }
-  displayMessages($("#discussionId").val(), lastMessageId);
+  loadNewestMessages($("#discussionId").val(), getNewestVisibleMessage());
+}
+
+function displayMoreMessages() {
+  loadMoreMessages($("#discussionId").val(), getOldestVisibleMessage());
 }
 
 function addMessage() {
@@ -53,32 +57,20 @@ function addMessage() {
   }
 }
 
-function displayMessages(discussionId, startMessagesId) {
-  startMessagesId = startMessagesId || null;
-
+function loadNewestMessages(discussionId, lowerBoundId) {
+  lowerBoundId = lowerBoundId || null;
   $.ajax({
     type: "POST",
-    url: "/frontend_dev.php/home/getLastMessages",
-    data: ({discussionId: discussionId, startMessagesId: startMessagesId}),
+    url: "/frontend_dev.php/home/getMessages",
+    data: ({discussionId: discussionId, lowerBoundId: lowerBoundId, reverseResults: 1}),
     dataType: "json",
-    success: function(msg) {
+    success: function(json) {
       var infos = "";
-      if(msg != undefined && msg.length > 0 && (infos = eval(msg)) != undefined){
-        var lastMessageId = 0;
-        var count = 0;
-        // TODO: passer "amount" (3) dans le retour json (c'est le controleur qui decide seul du nombre d'élément à afficher
-        $.each(infos, function(index, item) {
-          if(count < 3){
-            $("#messagesList").prepend('<li><span class="couleurCustom" style="background-color:#' + item.couleur + ';"></span><span class="contenu">' + item.contenu + '</span><span class="timing">' + item.heure + '</span></li>');
-            lastMessageId = item.id;
-            count++;
-          }
+      if(json != undefined && (infos = eval(json)) != undefined) {
+        $.each(infos.messages, function(index, item) {
+            $("#messagesList").prepend(decorateMessage(item));
         });
-        $("#messagesList").attr("data-last-message-id", lastMessageId);
-        $('#messagesList').children().filter(
-          function(index) {
-            return (index >= 3);
-          }).remove();
+        $("#moreMessages").toggle($("#messagesList li").length < infos.total);
       }
       return true;
     },
@@ -86,4 +78,60 @@ function displayMessages(discussionId, startMessagesId) {
       return false;
     }
   });
+}
+
+function loadMoreMessages(discussionId, upperBoundId) {
+  upperBoundId = upperBoundId || null;
+  $("#moreMessages").hide();
+  $.ajax({
+    type: "POST",
+    url: "/frontend_dev.php/home/getMessages",
+    data: ({discussionId: discussionId, upperBoundId: upperBoundId, reverseResults: 0}),
+    dataType: "json",
+    success: function(json) {
+      var infos = "";
+      if(json != undefined && (infos = eval(json)) != undefined) {
+        $.each(infos.messages, function(index, item) {
+            $("#messagesList").append(decorateMessage(item));
+        });
+        $("#moreMessages").toggle($("#messagesList li").length < infos.total);
+      }
+      return true;
+    },
+    error: function() {
+      $("#moreMessages").show();
+      return false;
+    }
+  });
+}
+
+function decorateMessage(message) {
+  var htmlRender = ""
+  if(message == undefined) {
+    return htmlRender;
+  }
+  htmlRender = '<li data-message-id="' + message.id + '"><span class="couleurCustom" style="background-color:#' + message.couleur + ';"></span><span class="contenu">' + message.contenu + '</span><span class="timing">' + message.heure + '</span></li>';
+  return htmlRender;
+}
+
+function getNewestVisibleMessage() {
+  if($("#messagesList") == undefined || $("#messagesList").length == 0) {
+    return null;
+  }
+  var messageId = $("#messagesList li").first().attr("data-message-id");
+  if(messageId == undefined) {
+    return null;
+  }
+  return messageId;
+}
+
+function getOldestVisibleMessage() {
+  if($("#messagesList") == undefined || $("#messagesList").length == 0) {
+    return null;
+  }
+  var messageId = $("#messagesList li").last().attr("data-message-id");
+  if(messageId == undefined) {
+    return null;
+  }
+  return messageId;
 }
