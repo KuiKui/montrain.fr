@@ -25,7 +25,7 @@ abstract class BaseMessagePeer {
 	const TM_CLASS = 'MessageTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 6;
+	const NUM_COLUMNS = 7;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -38,6 +38,9 @@ abstract class BaseMessagePeer {
 
 	/** the column name for the CONTENU field */
 	const CONTENU = 'message.CONTENU';
+
+	/** the column name for the COULEUR field */
+	const COULEUR = 'message.COULEUR';
 
 	/** the column name for the VALIDE field */
 	const VALIDE = 'message.VALIDE';
@@ -71,11 +74,11 @@ abstract class BaseMessagePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'DiscussionId', 'Contenu', 'Valide', 'CreatedAt', 'UpdatedAt', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'discussionId', 'contenu', 'valide', 'createdAt', 'updatedAt', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::DISCUSSION_ID, self::CONTENU, self::VALIDE, self::CREATED_AT, self::UPDATED_AT, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'discussion_id', 'contenu', 'valide', 'created_at', 'updated_at', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'DiscussionId', 'Contenu', 'Couleur', 'Valide', 'CreatedAt', 'UpdatedAt', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'discussionId', 'contenu', 'couleur', 'valide', 'createdAt', 'updatedAt', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::DISCUSSION_ID, self::CONTENU, self::COULEUR, self::VALIDE, self::CREATED_AT, self::UPDATED_AT, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'discussion_id', 'contenu', 'couleur', 'valide', 'created_at', 'updated_at', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
 	);
 
 	/**
@@ -85,11 +88,11 @@ abstract class BaseMessagePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'DiscussionId' => 1, 'Contenu' => 2, 'Valide' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'discussionId' => 1, 'contenu' => 2, 'valide' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DISCUSSION_ID => 1, self::CONTENU => 2, self::VALIDE => 3, self::CREATED_AT => 4, self::UPDATED_AT => 5, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'discussion_id' => 1, 'contenu' => 2, 'valide' => 3, 'created_at' => 4, 'updated_at' => 5, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'DiscussionId' => 1, 'Contenu' => 2, 'Couleur' => 3, 'Valide' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'discussionId' => 1, 'contenu' => 2, 'couleur' => 3, 'valide' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DISCUSSION_ID => 1, self::CONTENU => 2, self::COULEUR => 3, self::VALIDE => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'discussion_id' => 1, 'contenu' => 2, 'couleur' => 3, 'valide' => 4, 'created_at' => 5, 'updated_at' => 6, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
 	);
 
 	/**
@@ -162,6 +165,7 @@ abstract class BaseMessagePeer {
 		$criteria->addSelectColumn(MessagePeer::ID);
 		$criteria->addSelectColumn(MessagePeer::DISCUSSION_ID);
 		$criteria->addSelectColumn(MessagePeer::CONTENU);
+		$criteria->addSelectColumn(MessagePeer::COULEUR);
 		$criteria->addSelectColumn(MessagePeer::VALIDE);
 		$criteria->addSelectColumn(MessagePeer::CREATED_AT);
 		$criteria->addSelectColumn(MessagePeer::UPDATED_AT);

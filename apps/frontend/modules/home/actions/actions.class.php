@@ -84,6 +84,7 @@ class homeActions extends sfActions
         $message = new Message();
         $message->setDiscussionId($discussionId);
         $message->setContenu($content);
+        $message->setCouleur(kGraph::sha1ToColor(sha1($_SERVER['REMOTE_ADDR'])));
         $message->save();
 
         $discussion = DiscussionPeer::retrieveByPK($discussionId);
@@ -125,7 +126,8 @@ class homeActions extends sfActions
       $results [] = array(
         'id' => $message->getId(),
         'heure' => $message->getCreatedAt('\L\e m/d/Y \à H\hi:s'),
-        'contenu' => $message->getContenu()
+        'contenu' => $message->getContenu(),
+        'couleur' => $message->getCouleur()
       );
     }
 

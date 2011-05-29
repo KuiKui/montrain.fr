@@ -37,6 +37,12 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 	protected $contenu;
 
 	/**
+	 * The value for the couleur field.
+	 * @var        string
+	 */
+	protected $couleur;
+
+	/**
 	 * The value for the valide field.
 	 * Note: this column has a database default value of: true
 	 * @var        boolean
@@ -127,6 +133,16 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 	public function getContenu()
 	{
 		return $this->contenu;
+	}
+
+	/**
+	 * Get the [couleur] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getCouleur()
+	{
+		return $this->couleur;
 	}
 
 	/**
@@ -278,6 +294,26 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 
 		return $this;
 	} // setContenu()
+
+	/**
+	 * Set the value of [couleur] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Message The current object (for fluent API support)
+	 */
+	public function setCouleur($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->couleur !== $v) {
+			$this->couleur = $v;
+			$this->modifiedColumns[] = MessagePeer::COULEUR;
+		}
+
+		return $this;
+	} // setCouleur()
 
 	/**
 	 * Set the value of [valide] column.
@@ -436,9 +472,10 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->discussion_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->contenu = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->valide = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
-			$this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+			$this->couleur = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->valide = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
+			$this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+			$this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -448,7 +485,7 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 6; // 6 = MessagePeer::NUM_COLUMNS - MessagePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 7; // 7 = MessagePeer::NUM_COLUMNS - MessagePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Message object", $e);
@@ -828,12 +865,15 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 				return $this->getContenu();
 				break;
 			case 3:
-				return $this->getValide();
+				return $this->getCouleur();
 				break;
 			case 4:
-				return $this->getCreatedAt();
+				return $this->getValide();
 				break;
 			case 5:
+				return $this->getCreatedAt();
+				break;
+			case 6:
 				return $this->getUpdatedAt();
 				break;
 			default:
@@ -860,9 +900,10 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getDiscussionId(),
 			$keys[2] => $this->getContenu(),
-			$keys[3] => $this->getValide(),
-			$keys[4] => $this->getCreatedAt(),
-			$keys[5] => $this->getUpdatedAt(),
+			$keys[3] => $this->getCouleur(),
+			$keys[4] => $this->getValide(),
+			$keys[5] => $this->getCreatedAt(),
+			$keys[6] => $this->getUpdatedAt(),
 		);
 		return $result;
 	}
@@ -904,12 +945,15 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 				$this->setContenu($value);
 				break;
 			case 3:
-				$this->setValide($value);
+				$this->setCouleur($value);
 				break;
 			case 4:
-				$this->setCreatedAt($value);
+				$this->setValide($value);
 				break;
 			case 5:
+				$this->setCreatedAt($value);
+				break;
+			case 6:
 				$this->setUpdatedAt($value);
 				break;
 		} // switch()
@@ -939,9 +983,10 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setDiscussionId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setContenu($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setValide($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
+		if (array_key_exists($keys[3], $arr)) $this->setCouleur($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setValide($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
 	}
 
 	/**
@@ -956,6 +1001,7 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(MessagePeer::ID)) $criteria->add(MessagePeer::ID, $this->id);
 		if ($this->isColumnModified(MessagePeer::DISCUSSION_ID)) $criteria->add(MessagePeer::DISCUSSION_ID, $this->discussion_id);
 		if ($this->isColumnModified(MessagePeer::CONTENU)) $criteria->add(MessagePeer::CONTENU, $this->contenu);
+		if ($this->isColumnModified(MessagePeer::COULEUR)) $criteria->add(MessagePeer::COULEUR, $this->couleur);
 		if ($this->isColumnModified(MessagePeer::VALIDE)) $criteria->add(MessagePeer::VALIDE, $this->valide);
 		if ($this->isColumnModified(MessagePeer::CREATED_AT)) $criteria->add(MessagePeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(MessagePeer::UPDATED_AT)) $criteria->add(MessagePeer::UPDATED_AT, $this->updated_at);
@@ -1016,6 +1062,8 @@ abstract class BaseMessage extends BaseObject  implements Persistent {
 		$copyObj->setDiscussionId($this->discussion_id);
 
 		$copyObj->setContenu($this->contenu);
+
+		$copyObj->setCouleur($this->couleur);
 
 		$copyObj->setValide($this->valide);
 

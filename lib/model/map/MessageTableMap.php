@@ -39,6 +39,7 @@ class MessageTableMap extends TableMap {
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addForeignKey('DISCUSSION_ID', 'DiscussionId', 'INTEGER', 'discussion', 'ID', true, null, null);
 		$this->addColumn('CONTENU', 'Contenu', 'VARCHAR', true, 255, null);
+		$this->addColumn('COULEUR', 'Couleur', 'VARCHAR', false, 6, null);
 		$this->addColumn('VALIDE', 'Valide', 'BOOLEAN', true, null, true);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);

@@ -94,6 +94,7 @@ CREATE TABLE `message`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`discussion_id` INTEGER  NOT NULL,
 	`contenu` VARCHAR(255)  NOT NULL,
+	`couleur` VARCHAR(6),
 	`valide` TINYINT default 1 NOT NULL,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,

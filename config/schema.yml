@@ -29,6 +29,7 @@ propel:
     id:              ~
     discussion_id:   { type: integer, foreignTable: discussion, foreignReference: id, required: true }
     contenu:         { type: varchar(255), required: true}
+    couleur:         { type: varchar(6) }
     valide:          { type: boolean, required: true, default: true}
     created_at:      ~
     updated_at:      ~

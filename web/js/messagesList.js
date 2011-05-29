@@ -69,7 +69,7 @@ function displayMessages(discussionId, startMessagesId) {
         // TODO: passer "amount" (3) dans le retour json (c'est le controleur qui decide seul du nombre d'élément à afficher
         $.each(infos, function(index, item) {
           if(count < 3){
-            $("#messagesList").prepend('<li><span class="contenu">' + item.contenu + '</span><span class="timing">' + item.heure + '</span></li>');
+            $("#messagesList").prepend('<li><span class="couleurCustom" style="background-color:#' + item.couleur + ';"></span><span class="contenu">' + item.contenu + '</span><span class="timing">' + item.heure + '</span></li>');
             lastMessageId = item.id;
             count++;
           }
