@@ -49,15 +49,11 @@ class MessagePeer extends BaseMessagePeer
     {
       $c->add(self::ID, $startMessageId, Criteria::GREATER_EQUAL);
     }
-    $c->addAscendingOrderByColumn(self::CREATED_AT);
-
+    $c->addDescendingOrderByColumn(self::CREATED_AT);
+    $c->setLimit($amount);
     $messages = self::doSelect($c);
 
-    // TODO: utiliser une requete SQL qui évite de faire ce traitement car tous les enregistrements sont retournés...
-    // Il semblerait par contre, qu'il soit impossible de réaliser cette opération en une seule requête SQL
-    $results = (is_null($messages)) ? null : array_slice($messages, 0 - $amount, $amount, true);
-    
-    return $results;
+    return array_reverse($messages, true);
   }
 
   static public function getTotalAmountFromDiscussion($discussionId)
