@@ -7,6 +7,6 @@
   <input type="text" id="contenu" name="contenu" maxlength="<?php echo $messageMaxLength ?>"/>
   <input type="submit" value="Ecrire" id="ecrire"/>
 </form>
-<div id="informations" />
-<ul id="messagesList" />
+<div id="informations"></div>
+<ul id="messagesList"></ul>
 <a id="moreMessages" href="#" title="Voir plus de messages" style="display:none;">Voir plus de message</a>
