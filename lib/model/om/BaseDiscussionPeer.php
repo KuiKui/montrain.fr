@@ -1020,7 +1020,7 @@ abstract class BaseDiscussionPeer {
 	 */
 	static public function getUniqueColumnNames()
 	{
-	  return array(array('nom'));
+	  return array();
 	}
 
 	// symfony_behaviors behavior

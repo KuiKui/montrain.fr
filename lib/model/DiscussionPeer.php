@@ -17,5 +17,62 @@
  * @package    lib.model
  */
 class DiscussionPeer extends BaseDiscussionPeer {
+  
+  /**
+   * @static
+   * @param  $ligneId
+   * @param Criteria|null $criteria
+   * @return Criteria|null
+   */
+  static public function getDiscussionsFromLigneCriteria($ligneId, Criteria $criteria = null)
+  {
+    if(is_null($criteria))
+    {
+      $c = new Criteria();
+    }
+    else
+    {
+      $c = clone($criteria);
+    }
+    $c->add(self::LIGNE_ID, $ligneId);
+    $c->add(self::VALIDE, 1);
 
+    return $c;
+  }
+
+  /**
+   * @static
+   * @param  $ligneId
+   * @param  $amount
+   * @param null $lowerBoundId
+   * @param null $upperBoundId
+   * @return array
+   */
+  static public function getLastDiscussionsFromLigne($ligneId, $amount, $lowerBoundId = null, $upperBoundId = null)
+  {
+    $c = self::getDiscussionsFromLigneCriteria($ligneId);
+    if(!is_null($lowerBoundId) && $lowerBoundId > 0)
+    {
+      $c->add(self::ID, $lowerBoundId, Criteria::GREATER_THAN);
+    }
+    if(!is_null($upperBoundId) && $upperBoundId > 0)
+    {
+      $c->add(self::ID, $upperBoundId, Criteria::LESS_THAN);
+    }
+    $c->addDescendingOrderByColumn(self::IMPORTANTE);
+    $c->addDescendingOrderByColumn(self::UPDATED_AT);
+    $c->setLimit($amount);
+
+    return self::doSelect($c);
+  }
+  
+  /**
+   * @static
+   * @param  $ligneId
+   * @return int
+   */
+  static public function getTotalAmountFromLigne($ligneId)
+  {
+    return self::doCount(self::getDiscussionsFromLigneCriteria($ligneId));
+  }
 } // DiscussionPeer

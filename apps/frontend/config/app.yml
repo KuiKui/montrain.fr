@@ -5,3 +5,5 @@
 all:
   displayed_messages_amount: 3
   message_max_length: 140
+  displayed_discussions_amount: 4
+  discussion_max_length: 40

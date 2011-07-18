@@ -35,10 +35,6 @@ abstract class BaseDiscussionForm extends BaseFormPropel
       'updated_at'     => new sfValidatorDateTime(array('required' => false)),
     ));
 
-    $this->validatorSchema->setPostValidator(
-      new sfValidatorPropelUnique(array('model' => 'Discussion', 'column' => array('nom')))
-    );
-
     $this->widgetSchema->setNameFormat('discussion[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);

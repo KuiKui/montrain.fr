@@ -18,7 +18,7 @@ propel:
   discussion:
     id:              ~
     ligne_id:        { type: integer, foreignTable: ligne, foreignReference: id, required: true }
-    nom:             { type: varchar(255), required: true, index: unique }
+    nom:             { type: varchar(255), required: true }
     nombre_message:  { type: integer, required: true, default: 0}
     importante:      { type: boolean, required: true, default: false}
     valide:          { type: boolean, required: true, default: true}

@@ -48,14 +48,91 @@ class homeActions extends sfActions
   {
     $ligneId = $request->getParameter('ligne');
     $this->forward404Unless($ligneId);
-
-    $c = new Criteria();
-    $c->add(DiscussionPeer::LIGNE_ID, $ligneId);
-    $c->addDescendingOrderByColumn(DiscussionPeer::IMPORTANTE);
-    $c->addDescendingOrderByColumn(DiscussionPeer::UPDATED_AT);
-    $this->discussions = DiscussionPeer::doSelect($c);
+    $this->discussionMaxLength = sfConfig::get('app_discussion_max_length');
+    $this->displayedDiscussionsAmount = sfConfig::get('app_displayed_discussions_amount');
+    $this->ligne = LignePeer::retrieveByPK($ligneId);
+    $this->totalAmountOfDiscussions = DiscussionPeer::getTotalAmountFromLigne($ligneId);
   }
 
+  public function executeGetDiscussions(sfWebRequest $request)
+  {
+    $ligneId = $request->getParameter('ligneId');
+    $amount = ($request->hasParameter('amount')) ? $request->getParameter('amount') : sfConfig::get('app_displayed_discussions_amount');
+    $lowerBoundId = ($request->hasParameter('lowerBoundId')) ? $request->getParameter('lowerBoundId') : null;
+    $upperBoundId = ($request->hasParameter('upperBoundId')) ? $request->getParameter('upperBoundId') : null;
+    $reverseResults = ($request->hasParameter('reverseResults')) ? $request->getParameter('reverseResults') : false;
+    $this->forward404Unless(is_numeric($ligneId) && $ligneId > 0 && $request->isXmlHttpRequest());
+
+    $discussions = DiscussionPeer::getLastDiscussionsFromLigne($ligneId, $amount, $lowerBoundId, $upperBoundId);
+    if($reverseResults)
+    {
+      $discussions = array_reverse($discussions, true);
+    }
+
+    $results = array(
+      'discussions' => $this->formatDiscussions($discussions),
+      'total'       => DiscussionPeer::getTotalAmountFromLigne($ligneId)
+    );
+    
+    return $this->renderText(json_encode($results));
+  }
+  
+  public function formatDiscussions($discussions)
+  {
+    $results = array();
+    foreach($discussions as $discussion)
+    {
+      $results [] = array(
+        'id' => $discussion->getId(),
+        'heure' => $discussion->getUpdatedAt('\L\e m/d/Y \à H\hi:s'),
+        'titre' => $discussion->getNom(),
+        'lien'  => $this->getController()->genUrl('home/messagesList?discussion='.$discussion->getId())
+      );
+    }
+    return $results;
+  }
+  
+  public function executeAddDiscussion(sfWebRequest $request)
+  {
+    $returnCode = 1;
+    $newDiscussionId = 0;
+    
+    $ligneId = $request->getParameter('ligneId');
+    $this->forward404Unless($ligneId);
+    $titre = $request->getParameter('titre');
+
+    if(strlen($titre) > 0 && strlen($titre) <= sfConfig::get('app_discussion_max_length'))
+    {
+      $con = Propel::getConnection();
+      try
+      {
+        $con->beginTransaction();
+        $discussion = new Discussion();
+        $discussion->setLigneId($ligneId);
+        $discussion->setNom($titre);
+        $discussion->save();
+        $newDiscussionId = $discussion->getId();
+
+        $returnCode = 0;
+        $con->commit();
+      }
+      catch(Exception $e)
+      {
+        $con->rollback();
+        throw $e;
+      }
+    }
+    
+    if($request->isXmlHttpRequest())
+    {
+      return $this->renderText(json_encode('({returnCode:' . $returnCode . '})'));
+    }
+    else
+    {
+      $this->redirect(url_for('home/messagesList?discussionId=' . $newDiscussionId));
+    }
+  }
+  
   public function executeMessagesList(sfWebRequest $request)
   {
     $discussionId = $request->getParameter('discussion');
