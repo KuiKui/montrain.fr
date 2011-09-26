@@ -1,4 +1,3 @@
-<h1><a href="<?php echo url_for('@homepage') ?>">montrain.fr</a></h1>
 <a href="<?php echo url_for('@homepage') ?>">Choix de la ligne</a><br />
 <h2>Liste des discussions de la ligne <?php echo $ligne->getNom() ?></h2>
 <ul id="discussionsList"></ul>

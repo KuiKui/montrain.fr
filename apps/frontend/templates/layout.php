@@ -9,6 +9,17 @@
     <?php include_javascripts() ?>
   </head>
   <body>
-    <?php echo $sf_content ?>
+    <div id="wrapper">
+      <div id="header">
+        <h1 class="banner">
+          <span class="left"></span>
+          <a class="center" href="<?php echo url_for('@homepage') ?>">montrain.fr</a>
+          <span class="right"></span>
+        </h1>
+      </div>
+      <div id="container">
+        <?php echo $sf_content ?>
+      </div>
+    </div>
   </body>
 </html>

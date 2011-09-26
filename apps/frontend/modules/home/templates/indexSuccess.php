@@ -1,4 +1,3 @@
-<h1><a href="<?php echo url_for('@homepage') ?>">montrain.fr</a></h1>
 <form name="trainForm" id="trainForm" action="<?php echo url_for('home/discussionsList') ?>" method="get">
   <select id="gare">
     <option value="0">Sélectionnez une gare</option>
