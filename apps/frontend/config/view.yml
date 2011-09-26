@@ -6,15 +6,17 @@ default:
     content-type: text/html
 
   metas:
-    #title:        symfony project
+    title:        Montrain.fr
     #description:  symfony project
     #keywords:     symfony, project
     #language:     en
     #robots:       index, follow
 
-  stylesheets:    [main.css]
+  stylesheets:
+   - main.css
 
-  javascripts:    [jquery-1.5.1.js]
+  javascripts:
+   - vendor/jquery/jquery-1.6.2.min.js
 
   has_layout:     true
   layout:         layout
