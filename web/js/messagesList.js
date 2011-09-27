@@ -110,7 +110,7 @@ function decorateMessage(message) {
   if(message == undefined) {
     return htmlRender;
   }
-  htmlRender = '<li data-message-id="' + message.id + '"><span class="couleurCustom" style="background-color:#' + message.couleur + ';"></span><span class="contenu">' + message.contenu + '</span><span class="timing">' + message.heure + '</span></li>';
+  htmlRender = '<li data-message-id="' + message.id + '"><span class="couleurCustom" style="background-color:#' + message.couleur + ';"></span><span class="timing">' + message.heure + '</span><span class="contenu">' + message.contenu + '</span></li>';
   return htmlRender;
 }
 
